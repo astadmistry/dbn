@@ -29,6 +29,7 @@
 #![deny(rustdoc::broken_intra_doc_links)]
 #![deny(clippy::missing_errors_doc)]
 
+/// This module is for decoding.
 pub mod decode;
 pub mod encode;
 pub mod enums;

@@ -1,5 +1,4 @@
-//! Decoding DBN and Zstd-compressed DBN files and streams. Decoders implement the
-//! [`DecodeDbn`] trait.
+/// Decoding DBN and Zstd-compressed DBN files and streams. Decoders implement the [`DecodeDbn`] trait.
 pub mod dbn;
 // Having any tests in a deprecated module emits many warnings that can't be silenced, see
 // https://github.com/rust-lang/rust/issues/47238
