@@ -157,7 +157,7 @@ impl MetadataDecoder {
     const SCHEMA_VERSION: u8 = 1;
     const VERSION_CSTR_LEN: usize = 4;
     const RESERVED_LEN: usize = 39;
-    const DBZ_PREFIX: &[u8] = b"DBZ";
+    const DBZ_PREFIX: &'static [u8] = b"DBZ";
 
     pub(crate) fn read(reader: &mut impl io::Read) -> crate::Result<Metadata> {
         let mut prelude_buffer = [0u8; 2 * mem::size_of::<i32>()];

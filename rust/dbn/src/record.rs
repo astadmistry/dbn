@@ -1371,7 +1371,7 @@ impl SymbolMappingMsg {
 }
 
 impl SystemMsg {
-    const HEARTBEAT: &str = "Heartbeat";
+    const HEARTBEAT: &'static str = "Heartbeat";
 
     /// Creates a new `SystemMsg`.
     ///

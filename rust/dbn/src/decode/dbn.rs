@@ -1240,7 +1240,7 @@ mod r#async {
                 },
                 ts_out: 1678486110,
             };
-            let mut rec2 = rec1.clone();
+            let mut rec2 = rec1;
             rec2.rec.hd.instrument_id += 1;
             rec2.ts_out = 1678486827;
             let mut buffer = Vec::new();
@@ -1248,33 +1248,29 @@ mod r#async {
             encoder.encode(&rec1).await.unwrap();
             encoder.encode(&rec2).await.unwrap();
             let mut decoder_with = RecordDecoder::new(buffer.as_slice());
-            let res1_with = decoder_with
+            let res1_with = *decoder_with
                 .decode::<WithTsOut<OhlcvMsg>>()
                 .await
                 .unwrap()
-                .unwrap()
-                .clone();
-            let res2_with = decoder_with
+                .unwrap();
+            let res2_with = *decoder_with
                 .decode::<WithTsOut<OhlcvMsg>>()
                 .await
                 .unwrap()
-                .unwrap()
-                .clone();
+                .unwrap();
             assert_eq!(rec1, res1_with);
             assert_eq!(rec2, res2_with);
             let mut decoder_without = RecordDecoder::new(buffer.as_slice());
-            let res1_without = decoder_without
+            let res1_without = *decoder_without
                 .decode::<OhlcvMsg>()
                 .await
                 .unwrap()
-                .unwrap()
-                .clone();
-            let res2_without = decoder_without
+                .unwrap();
+            let res2_without = *decoder_without
                 .decode::<OhlcvMsg>()
                 .await
                 .unwrap()
-                .unwrap()
-                .clone();
+                .unwrap();
             assert_eq!(rec1.rec, res1_without);
             assert_eq!(rec2.rec, res2_without);
         }

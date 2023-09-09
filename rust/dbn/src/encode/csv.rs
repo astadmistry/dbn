@@ -455,7 +455,7 @@ mod tests {
             ts_recv: 1658441891000000000,
             ts_in_delta: 22_000,
             sequence: 1_002_375,
-            levels: array::from_fn(|_| BID_ASK.clone()),
+            levels: array::from_fn(|_| BID_ASK),
         }];
         let mut buffer = Vec::new();
         let writer = BufWriter::new(&mut buffer);

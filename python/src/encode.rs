@@ -233,13 +233,19 @@ pub mod tests {
 
     impl MockPyFile {
         pub fn new() -> Self {
-            Self {
-                buf: Arc::new(Mutex::new(Cursor::new(Vec::new()))),
-            }
+            Self::default()
         }
 
         pub fn inner(&self) -> Arc<Mutex<Cursor<Vec<u8>>>> {
             self.buf.clone()
+        }
+    }
+
+    impl Default for MockPyFile {
+        fn default() -> Self {
+            Self {
+                buf: Arc::new(Mutex::new(Cursor::new(Vec::new()))),
+            }
         }
     }
 
