@@ -6,8 +6,8 @@ use crate::{
         FromLittleEndianSlice,
     },
     enums::{SType, Schema},
-    MappingInterval, Metadata, SymbolMapping, DBN_VERSION, METADATA_FIXED_LEN, NULL_SCHEMA,
-    NULL_STYPE, UNDEF_TIMESTAMP,
+    MappingInterval, Metadata, MetadataPrelude, SymbolMapping, DBN_VERSION, METADATA_FIXED_LEN,
+    NULL_SCHEMA, NULL_STYPE, UNDEF_TIMESTAMP,
 };
 
 /// Type for decoding [`Metadata`] from Databento Binary Encoding (DBN).
@@ -34,6 +34,15 @@ where
     /// # Errors
     /// This function will return an error if it is unable to parse the metadata.
     pub fn decode(&mut self) -> crate::Result<Metadata> {
+        let MetadataPrelude { version, length } = self.decode_prelude()?;
+        let mut metadata_buffer = vec![0u8; length as usize];
+        self.reader
+            .read_exact(&mut metadata_buffer)
+            .map_err(|e| crate::Error::io(e, "reading fixed metadata"))?;
+        Self::decode_metadata_fields(version, metadata_buffer)
+    }
+
+    pub(crate) fn decode_prelude(&mut self) -> crate::Result<MetadataPrelude> {
         let mut prelude_buffer = [0u8; 8];
         self.reader
             .read_exact(&mut prelude_buffer)
@@ -51,11 +60,7 @@ where
                 "Invalid DBN metadata. Metadata length shorter than fixed length.",
             ));
         }
-        let mut metadata_buffer = vec![0u8; length as usize];
-        self.reader
-            .read_exact(&mut metadata_buffer)
-            .map_err(|e| crate::Error::io(e, "reading fixed metadata"))?;
-        Self::decode_metadata_fields(version, metadata_buffer)
+        Ok(MetadataPrelude { version, length })
     }
 
     pub(crate) fn decode_metadata_fields(version: u8, buffer: Vec<u8>) -> crate::Result<Metadata> {
