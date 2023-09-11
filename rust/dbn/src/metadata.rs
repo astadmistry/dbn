@@ -13,6 +13,25 @@ use serde::Deserialize;
 use crate::enums::{SType, Schema};
 use crate::record::as_u8_slice;
 
+/// Metadata prelude, i.e. the first 5 bytes of the metadata header.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "python", pyo3::pyclass(module = "databento_dbn"))]
+#[cfg_attr(not(feature = "python"), derive(MockPyo3))] // bring `pyo3` attribute into scope
+pub struct MetadataPrelude {
+    /// The DBN schema version number. Newly-encoded DBN files will use
+    /// [`crate::DBN_VERSION`].
+    pub version: u8,
+    /// The length of the remaining metadata header, i.e. excluding version and length.
+    pub length: u32,
+}
+
+impl MetadataPrelude {
+    /// Creates a new `MetadataPrelude`.
+    pub fn new(version: u8, length: u32) -> Self {
+        Self { version, length }
+    }
+}
+
 /// Information about the data contained in a DBN file or stream. DBN requires the
 /// Metadata to be included at the start of the encoded data.
 #[derive(Debug, Clone, PartialEq, Eq)]

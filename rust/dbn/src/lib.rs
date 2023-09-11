@@ -47,7 +47,9 @@ pub mod record;
 pub mod record_ref;
 
 pub use crate::error::{Error, Result};
-pub use crate::metadata::{MappingInterval, Metadata, MetadataBuilder, SymbolMapping};
+pub use crate::metadata::{
+    MappingInterval, Metadata, MetadataBuilder, MetadataPrelude, SymbolMapping,
+};
 pub use crate::record_ref::RecordRef;
 
 /// The current version of the DBN encoding, which is different from the crate version.
